@@ -5,7 +5,7 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.Activities
+namespace Application.Advertisements
 {
     public class Delete
     {
@@ -25,9 +25,9 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                Activity activity = await _context.Activities.FindAsync(request.Id);
+                Advertisement advertisement = await _context.Advertisements.FindAsync(request.Id);
                 
-                _context.Activities.Remove(activity);
+                _context.Advertisements.Remove(advertisement);
                 
                 await _context.SaveChangesAsync();
                 

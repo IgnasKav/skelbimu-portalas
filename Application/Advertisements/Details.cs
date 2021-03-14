@@ -5,17 +5,17 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.Activities
+namespace Application.Advertisements
 {
     public class Details
     {
-        public class Query: IRequest<Activity>
+        public class Query: IRequest<Advertisement>
         {
             public Guid Id { get; set; }
 
         }
 
-        public class Handler : IRequestHandler<Query, Activity>
+        public class Handler : IRequestHandler<Query, Advertisement>
         {
             private readonly DataContext _context;
 
@@ -24,9 +24,9 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Advertisement> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.FindAsync(request.Id);
+                return await _context.Advertisements.FindAsync(request.Id);
             }
         }
     }

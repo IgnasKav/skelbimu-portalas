@@ -3,15 +3,14 @@ using System.Threading.Tasks;
 using Domain;
 using MediatR;
 using Persistence;
-using SQLitePCL;
 
-namespace Application.Activities
+namespace Application.Advertisements
 {
     public class Create
     {
         public class Command : IRequest
         {
-            public Activity Activity { get; set; }
+            public Advertisement Advertisement { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -25,7 +24,7 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Activities.Add(request.Activity);
+                _context.Advertisements.Add(request.Advertisement);
                 
                 await _context.SaveChangesAsync();
                 
