@@ -1,13 +1,13 @@
 import React from 'react';
-import { Advertisement } from '../../../app/models/Advertisement';
+import { Advertisement } from 'app/models/Advertisement';
 import './advertisement-list.scss';
 
-interface AdvertisementListProps {
+interface Props {
     advertisements: Advertisement[];
     onAddSelect: (id: string) => void;
 }
 
-export default function AdvertisementList({ advertisements, onAddSelect }: AdvertisementListProps) {
+export default function AdvertisementList({ advertisements, onAddSelect }: Props) {
     return (
         <>
             {advertisements.map(advertisement => (

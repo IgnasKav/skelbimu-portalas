@@ -20,6 +20,7 @@
 
 body {
   margin: 0;
+  line-height: unset;
   font-family: 'Roboto', sans-serif;
   background-color: #FAFAFA;
 }

@@ -1,4 +1,4 @@
-$no-image: "../../../testing-images/no-image.png";
+$no-image: "../../../../testing-images/no-image.png";
 
 
 .item {
@@ -24,6 +24,7 @@ $no-image: "../../../testing-images/no-image.png";
         .city {
             font-family: 'Roboto-Light';
             font-size: 12px;
+            margin-top: 3px;
         }
         .separator {
             width: 35px;
@@ -46,7 +47,7 @@ $no-image: "../../../testing-images/no-image.png";
         .title {
             font-family: 'Roboto-Light';
             font-size: 18px;
-            margin-top: 5px;
+            margin-top: 7px;
         }
         .middle-section {
             font-family: 'Roboto-Light';
