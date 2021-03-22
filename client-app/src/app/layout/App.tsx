@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 import axios from 'axios';
-import { Header, List } from 'semantic-ui-react';
+import { Advertisement } from 'app/models/Advertisement';
+import AdvertisementDashboard from 'features/advertisements/advertisement-dashboard';
+import Header from './Header/header';
 
 function App() {
-  const [advertisements, setAdvertisements] = useState([]);
+  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/advertisements').then(response => {
+    axios.get<Advertisement[]>('http://localhost:5000/api/advertisements').then(response => {
       setAdvertisements(response.data);
     });
   }, [])
 
   return (
-    <div className="App">
-      <Header as='h2' icon='users' content='Reactivities' />
-      <List>
-        {
-          advertisements.map((advertisement: any) => (
-            <li key={advertisement.id}>
-              {advertisement.title}
-            </li>
-          ))
-        }
-      </List>
-    </div>
+    <>
+      <Header />
+      <AdvertisementDashboard advertisements={advertisements} />
+    </>
   );
 }
 

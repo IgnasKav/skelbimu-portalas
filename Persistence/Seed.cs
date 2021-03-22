@@ -23,6 +23,7 @@ namespace Persistence
                     State = "Patvirtintas",
                     City = "Kaunas",
                     Views = 0,
+                    Price = 20
                 },
                 new Advertisement
                 {
@@ -33,6 +34,7 @@ namespace Persistence
                     State = "Patvirtintas",
                     City = "Vilnius",
                     Views = 2,
+                    Price = 30
                 },
                 new Advertisement
                 {
@@ -43,6 +45,7 @@ namespace Persistence
                     State = "Patvirtintas",
                     City = "Vilnius",
                     Views = 8,
+                    Price = 15
                 },
                 new Advertisement
                 {
@@ -53,6 +56,7 @@ namespace Persistence
                     State = "Patvirtintas",
                     City = "Utena",
                     Views = 4,
+                    Price = 500
                 },
                 new Advertisement
                 {
@@ -63,6 +67,7 @@ namespace Persistence
                     State = "Patvirtintas",
                     City = "Kaunas",
                     Views = 7,
+                    Price = 50
                 }
             };
 

@@ -13,5 +13,7 @@ namespace Domain
         public string City { get; set; }
         public int Views { get; set; }
 
+        public decimal Price { get; set; }
+
     }
 }
