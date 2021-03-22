@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './advertisement-dashboard.scss';
+import css from './advertisement-dashboard.module.scss';
 import { Advertisement } from 'app/models/Advertisement';
 import AdvertisementList from './advertisement-list/advertisement-list';
 import AdvertisementDetails from './advertisement-deatails/advertisement-details';
@@ -18,12 +18,12 @@ export default function AdvertisementDashboard({ advertisements }: Props) {
     const handleAddClose = () => setSelectedAdvertisement(undefined);
 
     return (
-        <div className="dashboard">
-            <div className="list">
+        <div className={css.dashboard}>
+            <div className={css.list}>
                 <AdvertisementList advertisements={advertisements}
                     onAddSelect={handleAddSelect} />
             </div>
-            {selectedAdvetisement && <div className="details">
+            {selectedAdvetisement && <div className={css.details}>
                 <AdvertisementDetails advertisement={selectedAdvetisement} onAddClose={handleAddClose} />
             </div>}
         </div>

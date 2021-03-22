@@ -1,10 +1,10 @@
 import React from 'react';
-import './header.scss';
+import css from './header.module.scss';
 
 export default function Header() {
     return (
         <>
-            <div className="header">
+            <div className={css.header}>
                 Skelbimu Portalas
             </div>
         </>

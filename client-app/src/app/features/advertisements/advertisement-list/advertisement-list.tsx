@@ -1,6 +1,6 @@
 import React from 'react';
 import { Advertisement } from 'app/models/Advertisement';
-import './advertisement-list.scss';
+import css from './advertisement-list.module.scss';
 
 interface Props {
     advertisements: Advertisement[];
@@ -11,17 +11,17 @@ export default function AdvertisementList({ advertisements, onAddSelect }: Props
     return (
         <>
             {advertisements.map(advertisement => (
-                <div className='item' onClick={() => onAddSelect(advertisement.id)}>
-                    <div className='left'>
+                <div className={css.item} onClick={() => onAddSelect(advertisement.id)}>
+                    <div className={css.left}>
                     </div>
-                    <div className='right'>
-                        <div className="top-section">
-                            <div className='city'>{advertisement.city}</div>
-                            <div className='title'>{advertisement.title}</div>
-                            <hr className='separator' />
+                    <div className={css.right}>
+                        <div>
+                            <div className={css.city}>{advertisement.city}</div>
+                            <div className={css.title}>{advertisement.title}</div>
+                            <hr className={css.separator} />
                         </div>
-                        <div className='middle-section'>{advertisement.description}</div>
-                        <div className='bottom-sectoin'>{advertisement.price} €</div>
+                        <div className={css.middleSection}>{advertisement.description}</div>
+                        <div className={css.bottomSection}>{advertisement.price} €</div>
                     </div>
                 </div>
             ))}
