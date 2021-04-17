@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
@@ -10,8 +11,22 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context)
         {
+            if (!context.Categories.Any())
+            {
+                var category = new Category
+                {
+                    Name = "default",
+                };
+                
+                await context.Categories.AddAsync(category);
+                await context.SaveChangesAsync();
+            }
+
             if (context.Advertisements.Any()) return;
-            
+
+            var categoryList = await context.Categories.ToListAsync();
+            var defaultCategory = categoryList[0];
+
             var advertisements = new List<Advertisement>
             {
                 new Advertisement
@@ -19,7 +34,7 @@ namespace Persistence
                     Title = "Skelbimas 1",
                     Date = DateTime.Now.AddMonths(-2),
                     Description = "naujas telefonas",
-                    Category = "Mobilieji telefonai",
+                    CategoryId = defaultCategory.Id,
                     State = "Patvirtintas",
                     City = "Kaunas",
                     Views = 0,
@@ -30,7 +45,7 @@ namespace Persistence
                     Title = "Skelbimas 2",
                     Date = DateTime.Now.AddMonths(-1),
                     Description = "naudotas arbatinukas",
-                    Category = "Buitis",
+                    CategoryId = defaultCategory.Id,
                     State = "Patvirtintas",
                     City = "Vilnius",
                     Views = 2,
@@ -41,7 +56,7 @@ namespace Persistence
                     Title = "Skelbimas 3",
                     Date = DateTime.Now.AddMonths(1),
                     Description = "naudotas siurblys",
-                    Category = "Buitis",
+                    CategoryId = defaultCategory.Id,
                     State = "Patvirtintas",
                     City = "Vilnius",
                     Views = 8,
@@ -52,7 +67,7 @@ namespace Persistence
                     Title = "Skelbimas 4",
                     Date = DateTime.Now.AddMonths(2),
                     Description = "zaidimu kompiuteris",
-                    Category = "Kompiuteriai",
+                    CategoryId = defaultCategory.Id,
                     State = "Patvirtintas",
                     City = "Utena",
                     Views = 4,
@@ -63,7 +78,7 @@ namespace Persistence
                     Title = "Skelbimas 5",
                     Date = DateTime.Now.AddMonths(3),
                     Description = "Klaviatura",
-                    Category = "Elektronika",
+                    CategoryId = defaultCategory.Id,
                     State = "Patvirtintas",
                     City = "Kaunas",
                     Views = 7,

@@ -10,13 +10,13 @@ namespace API.Controllers
     public class AdvertisementsController: BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Advertisement>>> GetAdvertisements()
+        public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisements()
         {
             return await Mediator.Send(new List.Query());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Advertisement>> GetAdvertisement(Guid id)
+        public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});
         }
