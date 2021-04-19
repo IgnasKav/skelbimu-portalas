@@ -1,6 +1,6 @@
 using System;
 
-namespace Application.Advertisements
+namespace Application.Categories
 {
     public class CategoryDto
     {

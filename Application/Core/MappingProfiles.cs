@@ -1,4 +1,5 @@
 using Application.Advertisements;
+using Application.Categories;
 using AutoMapper;
 using Domain;
 

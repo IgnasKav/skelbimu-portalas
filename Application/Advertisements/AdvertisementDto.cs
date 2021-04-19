@@ -1,4 +1,5 @@
 using System;
+using Application.Categories;
 using Domain;
 
 namespace Application.Advertisements
