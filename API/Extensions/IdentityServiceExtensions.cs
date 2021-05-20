@@ -10,8 +10,8 @@ namespace API.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddIdentityCore<User>().AddEntityFrameworkStores<DataContext>()
-                .AddSignInManager<SignInManager<User>>();
+            services.AddIdentityCore<AppUser>().AddEntityFrameworkStores<DataContext>()
+                .AddSignInManager<SignInManager<AppUser>>();
             services.AddAuthentication();
 
             return services;

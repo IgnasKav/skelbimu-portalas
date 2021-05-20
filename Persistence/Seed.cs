@@ -10,15 +10,15 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context, UserManager<User> userManager)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
             if (!userManager.Users.Any())
             {
-                var users = new List<User>
+                var users = new List<AppUser>
                 {
-                    new User {DisplayName = "Rokas", UserName = "rok45", Email = "rok45@local.com"},
-                    new User {DisplayName = "Ignas", UserName = "IgnasKav", Email = "ignas.kavaliauskas5@gmail.com"},
-                    new User {DisplayName = "Matas", UserName = "Mat42Bo55", Email = "mat42boss@gmail.com"},
+                    new AppUser {DisplayName = "Rokas", UserName = "rok45", Email = "rok45@local.com"},
+                    new AppUser {DisplayName = "Ignas", UserName = "IgnasKav", Email = "ignas.kavaliauskas5@gmail.com"},
+                    new AppUser {DisplayName = "Matas", UserName = "Mat42Bo55", Email = "mat42boss@gmail.com"},
                 };
 
                 foreach (var user in users)
