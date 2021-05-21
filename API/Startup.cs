@@ -34,11 +34,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers(opt => 
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                opt.Filters.Add(new AuthorizeFilter(policy));
-            });
+            services.AddControllers();
             services.AddApplicationServices(_config);
             services.AddIdentityServices(_config);
         }
