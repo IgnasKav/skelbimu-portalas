@@ -14,7 +14,11 @@ namespace API.Controllers
         {
             return await Mediator.Send(new List.Query());
         }
-
+        [HttpGet("list/{id}")]
+        public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisementsByCategory(Guid id)
+        {
+            return await Mediator.Send(new List.Query{Id = id});
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(Guid id)
         {

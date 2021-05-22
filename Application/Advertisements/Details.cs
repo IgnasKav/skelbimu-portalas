@@ -31,9 +31,9 @@ namespace Application.Advertisements
             public async Task<AdvertisementDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var advertisement = await _context.Advertisements
-                    .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(x => x.Id == request.Id);
-                
+                .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == request.Id);
+
                 return advertisement;
             }
         }
