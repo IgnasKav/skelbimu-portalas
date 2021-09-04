@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Advertisements;
 using Domain;
+using ElasticSearch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class AdvertisementsController: BaseApiController
     {
-        [HttpGet]
-        public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisements()
+        [HttpPost("search")]
+        public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisements(ElasticSearchRequest request)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query{SearchText = request.Query});
         }
         [HttpGet("list/{id}")]
         public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisementsByCategory(Guid id)
         {
-            return await Mediator.Send(new List.Query{Id = id});
+            return await Mediator.Send(new List.Query{});
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(Guid id)

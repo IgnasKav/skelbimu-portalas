@@ -1,46 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using ElasticSearch;
+using ElasticSearch.Indexing;
+using ElasticSearch.SearchDocuments;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Persistence;
 
 namespace Application.Advertisements
 {
     public class List
     {
-        public class Query : IRequest<List<AdvertisementDto>>
+        public class Query : MediatR.IRequest<List<AdvertisementDto>>
         {
-            public Guid Id { get; set;} = Guid.Empty;
+            public string SearchText { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<AdvertisementDto>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IElasticSearchService _es;
             
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IElasticSearchService es)
             {
                 _context = context;
                 _mapper = mapper;
+                _es = es;
             }
             
             public async Task<List<AdvertisementDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var advertisements = await _context.Advertisements
-                    .ProjectTo<AdvertisementDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+                var elasticResult = await _es.Search<AdvertisementSearchDocument>(IndexDefinition.Advertisement, request.SearchText);
+                var advertisements = elasticResult.Items;
 
-                if(request.Id != Guid.Empty)
-                {
-                   advertisements = advertisements.FindAll(x => x.Category.id == request.Id).ToList();
-                }
-
-                return advertisements;
+                return _mapper.Map<List<AdvertisementSearchDocument>, List<AdvertisementDto>>(advertisements);
             }
         }
     }

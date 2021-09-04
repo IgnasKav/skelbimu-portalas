@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Domain;
+using ElasticSearch;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,10 @@ namespace API
             try {
                 var context = services.GetRequiredService<DataContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
+                var elastic = services.GetRequiredService<IElasticSearchService>();
                 await context.Database.MigrateAsync();
                 await Seed.SeedData(context, userManager);
+                await ElasticSeed.ElasticStartup(context, elastic);
             }
             catch (Exception ex) {
                 var logger = services.GetRequiredService<ILogger<Program>>();

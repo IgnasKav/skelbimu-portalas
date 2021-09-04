@@ -1,9 +1,11 @@
 using Application.Advertisements;
 using Application.Core;
+using ElasticSearch;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Persistence;
 
@@ -28,6 +30,11 @@ namespace API.Extensions
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            
+            ElasticSearchOptions elasticSearchOptions = new ElasticSearchOptions();
+            config.Bind(nameof(ElasticSearchOptions), elasticSearchOptions);
+            services.TryAddSingleton(elasticSearchOptions);
+            services.AddTransient<IElasticSearchService, ElasticSearchService>();
 
             return services;
         }
