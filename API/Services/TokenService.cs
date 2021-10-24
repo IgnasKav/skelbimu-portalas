@@ -17,7 +17,7 @@ namespace API.Services
             _config = config;
         }
 
-        public string CreateToken(User user)
+        public virtual string CreateToken(User user)
         {
             var claims = new List<Claim>
             {
