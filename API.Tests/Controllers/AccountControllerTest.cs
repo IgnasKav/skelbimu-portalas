@@ -143,7 +143,39 @@ namespace API.Tests.Controllers
         [Fact]
         public async Task TestSuccessfulRegistration()
         {
+            var users = new List<User>()
+            {
+              new User{Email = "Email", UserName = "Username", DisplayName = "Name"},
+            };
 
+            var mockUsers = users.AsQueryable().BuildMock();
+
+            mockUserManager
+                .Setup(mockUserManager => mockUserManager.Users)
+                .Returns(mockUsers.Object);
+
+            mockUserManager
+                .Setup(mockUserManager => mockUserManager.CreateAsync(It.IsAny<User>(), "Password"))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockTokenService.Setup(tokenService => tokenService.CreateToken(It.IsAny<User>())).Returns("token123");
+
+            RegisterDto registerDto = new() { DisplayName = "Name", Email = "Foo", Username = "Bar", Password = "Password" };
+            var result = await controller.Register(registerDto);
+
+            var actionResult = Assert.IsType<ActionResult<UserDto>>(result);
+            Assert.IsType<UserDto>(actionResult.Value);
+
+            var expectedResult = new UserDto
+            {
+                DisplayName = "Name",
+                Token = "token123",
+                Username = "Bar"
+            };
+
+            var actualResult = actionResult.Value;
+
+            Assert.Equal(JsonConvert.SerializeObject(expectedResult), JsonConvert.SerializeObject(actualResult));
         }
     }
 }
