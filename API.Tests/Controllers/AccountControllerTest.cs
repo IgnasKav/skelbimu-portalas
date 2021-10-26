@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MockQueryable.Moq;
 using Moq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -105,6 +108,42 @@ namespace API.Tests.Controllers
             var actualResult = actionResult.Value;
 
             Assert.Equal(JsonConvert.SerializeObject(expectedResult), JsonConvert.SerializeObject(actualResult));
+        }
+
+        [Theory]
+        [InlineData("Email", "Username", "Password", "Email taken")]
+        [InlineData("UnusedEmail", "Username", "Password", "Username taken")]
+        [InlineData("UnusedEmail", "UnusedUsername", "Password", "Problem registering user")]
+        public async Task TestRegistrationFailsDueToBadData(string email, string username, string password, string expectedErrorMessage)
+        {
+            var users = new List<User>()
+            {
+              new User{Email = "Email", UserName = "Username", DisplayName = "Name"},  
+            };
+
+            var mockUsers = users.AsQueryable().BuildMock();
+
+            mockUserManager
+                .Setup(mockUserManager => mockUserManager.Users)
+                .Returns(mockUsers.Object);
+
+            mockUserManager
+                .Setup(mockUserManager => mockUserManager.CreateAsync(It.IsAny<User>(), "Password"))
+                .ReturnsAsync(IdentityResult.Failed());                
+
+            RegisterDto registerDto = new() { DisplayName = "Name", Email = email, Username = username, Password = password };
+            var result = await controller.Register(registerDto);
+
+            var actionResult = Assert.IsType<ActionResult<UserDto>>(result);
+            Assert.IsType<BadRequestObjectResult>(actionResult.Result);
+
+            Assert.Equal(expectedErrorMessage, ((BadRequestObjectResult)actionResult.Result).Value);
+        }        
+
+        [Fact]
+        public async Task TestSuccessfulRegistration()
+        {
+
         }
     }
 }
