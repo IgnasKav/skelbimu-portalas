@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using ElasticSearch.SearchDocuments;
 using Microsoft.EntityFrameworkCore;
 using Nest;
@@ -25,6 +26,18 @@ namespace ElasticSearch.Indexing
 
             return await PerfomIndexing(client, documentList);
         }
+
+        // internal override Task<int> IndexAsync<T>(IElasticClient client, List<T> documents) where T: class
+        // {
+        //     var documentList = new List<AdvertisementSearchDocument>();
+        //     
+        //     foreach (var advertisement in documents)
+        //     {
+        //         documentList.Add(AdvertisementSearchDocument.Map(advertisement));
+        //     }
+        //
+        //     return 0;
+        // }
 
         public override async Task<CreateIndexResponse> Create(IElasticClient client)
         {

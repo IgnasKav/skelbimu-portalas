@@ -13,6 +13,7 @@ namespace ElasticSearch.Indexing
         public abstract string Name { get; }
         public abstract Task<CreateIndexResponse> Create(IElasticClient client);
         internal abstract Task<int> IndexAsync(IElasticClient client, DataContext context, List<Guid> ids);
+        // internal abstract Task<int> IndexAsync<T>(IElasticClient client, List<T> documents) where T: class;
         public static AdvertisementIndexDefinition Advertisement => new AdvertisementIndexDefinition();
         public static IEnumerable<IndexDefinition> All
         {
@@ -22,8 +23,8 @@ namespace ElasticSearch.Indexing
             }
         }
 
-        protected async Task<int> PerfomIndexing<TDocument>(IElasticClient client, List<TDocument> documents)
-            where TDocument : SearchDocumentBase
+        protected async Task<int> PerfomIndexing<T>(IElasticClient client, List<T> documents)
+            where T : SearchDocumentBase
         {
             if (documents.Any())
             {

@@ -25,7 +25,7 @@ namespace ElasticSearch.SearchDocuments
             var result = new AdvertisementSearchDocument()
             {
                 Id = advertisement.Id,
-                Title = advertisement.Title,
+                Title = $"{advertisement.Title} {advertisement.Description}",
                 Date = advertisement.Date,
                 Description = advertisement.Description,
                 State = advertisement.State,
