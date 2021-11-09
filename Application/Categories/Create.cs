@@ -31,6 +31,10 @@ namespace Application.Categories
                     category.ParentId = null;
                 }
 
+                if (category.Name == null)
+                {
+                    throw new Exception("Category must have name");
+                }
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
                 

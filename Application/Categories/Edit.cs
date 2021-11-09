@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
@@ -25,6 +26,11 @@ namespace Application.Categories
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 Category category = await _context.Categories.FindAsync(request.Category.Id);
+
+                if (request.Category.Name == null)
+                {
+                    throw new Exception("Category must have a name");
+                }
 
                 category.Name = request.Category.Name;
 

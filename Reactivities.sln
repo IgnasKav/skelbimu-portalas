@@ -13,7 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearch", "ElasticSearch\ElasticSearch.csproj", "{6E85D643-0F7D-41AF-A66C-21A6C7F153DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Tests", "API.Tests\API.Tests.csproj", "{8F58C952-6579-479B-9317-092595F929BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Tests", "API.Tests\API.Tests.csproj", "{8F58C952-6579-479B-9317-092595F929BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CBAFD6C3-DA85-4550-856E-67640C09E516} = {CBAFD6C3-DA85-4550-856E-67640C09E516}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
