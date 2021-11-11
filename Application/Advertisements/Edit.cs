@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,6 +32,16 @@ namespace Application.Advertisements
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 Advertisement advertisement = await _context.Advertisements.FindAsync(request.Advertisement.Id);
+
+                if (advertisement == null)
+                {
+                    throw new Exception("Advertisement does not exist");
+                }
+
+                if (request.Advertisement.Views < advertisement.Views)
+                {
+                    throw new Exception("Cant decrease advertisement views");
+                }
 
                 _mapper.Map(request.Advertisement, advertisement);
                 

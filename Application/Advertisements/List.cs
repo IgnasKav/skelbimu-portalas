@@ -10,8 +10,6 @@ using ElasticSearch;
 using ElasticSearch.Indexing;
 using ElasticSearch.SearchDocuments;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Nest;
 using Persistence;
 
 namespace Application.Advertisements
