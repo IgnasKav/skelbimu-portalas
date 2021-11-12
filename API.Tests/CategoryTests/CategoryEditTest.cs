@@ -60,7 +60,7 @@ namespace API.Tests.CategoryTests
             mockContext.Setup(m => m.Categories).Returns(mockDbSet.Object);
 
             var exception = await Assert.ThrowsAsync<Exception>(async () => await mockEditHandler.Handle(mockCommand, CancellationToken.None));
-            Assert.Equal("Category must have name", exception.Message);
+            Assert.Equal("Category must have a name", exception.Message);
         }
     }
 }

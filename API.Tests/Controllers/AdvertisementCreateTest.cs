@@ -164,5 +164,95 @@ namespace API.Tests.Controllers
             var exception = await Assert.ThrowsAsync<Exception>( async () => await handler.Handle(command, new CancellationToken()));
             Assert.Equal("Date must be today", exception.Message);
         }
+
+        [Fact]
+        public async Task CanCreateAdvertisementWithoutDescription()
+        {
+            var command = new Create.Command
+            {
+                Advertisement = new Advertisement
+                {
+                    Title = "test",
+                    Date = DateTime.Now,
+                    Description = "",
+                    CategoryId = new Guid(),
+                    Category = new Category
+                    {
+                        Name = "deafault"
+                    },
+                    State = "test",
+                    City = "test",
+                    Views = 0,
+                    Price = 0
+                }
+            };
+
+            context.Setup(m => m.Advertisements).Returns(dbSet.Object);
+
+            await handler.Handle(command, new CancellationToken());
+
+            dbSet.Verify(m => m.Add(It.IsAny<Advertisement>()), Times.Once());
+            context.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task CanCreateAdvertisementWithoutState()
+        {
+            var command = new Create.Command
+            {
+                Advertisement = new Advertisement
+                {
+                    Title = "test",
+                    Date = DateTime.Now,
+                    Description = "test",
+                    CategoryId = new Guid(),
+                    Category = new Category
+                    {
+                        Name = "deafault"
+                    },
+                    State = "",
+                    City = "test",
+                    Views = 0,
+                    Price = 0
+                }
+            };
+
+            context.Setup(m => m.Advertisements).Returns(dbSet.Object);
+
+            await handler.Handle(command, new CancellationToken());
+
+            dbSet.Verify(m => m.Add(It.IsAny<Advertisement>()), Times.Once());
+            context.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task CanCreateAdvertisementWithoutCity()
+        {
+            var command = new Create.Command
+            {
+                Advertisement = new Advertisement
+                {
+                    Title = "test",
+                    Date = DateTime.Now,
+                    Description = "test",
+                    CategoryId = new Guid(),
+                    Category = new Category
+                    {
+                        Name = "deafault"
+                    },
+                    State = "test",
+                    City = "",
+                    Views = 0,
+                    Price = 0
+                }
+            };
+
+            context.Setup(m => m.Advertisements).Returns(dbSet.Object);
+
+            await handler.Handle(command, new CancellationToken());
+
+            dbSet.Verify(m => m.Add(It.IsAny<Advertisement>()), Times.Once());
+            context.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
     }
 }
