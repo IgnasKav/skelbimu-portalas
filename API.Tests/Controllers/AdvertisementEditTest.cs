@@ -104,5 +104,52 @@ namespace API.Tests.Controllers
             var exception = await Assert.ThrowsAsync<Exception>( async () => await handler.Handle(command, new CancellationToken()));
             Assert.Equal("Cant decrease advertisement views", exception.Message);
         }
+
+        [Fact]
+        public async Task CanEditValidAdvertisements()
+        {
+            var savedAdvertisement = new Advertisement
+            {
+                Id = new Guid(),
+                Title = "test",
+                Date = DateTime.Now,
+                Description = "test",
+                CategoryId = new Guid(),
+                Category = new Category
+                {
+                    Name = "default"
+                },
+                State = "test",
+                City = "test",
+                Views = 2,
+                Price = 0
+            };
+
+            var command = new Edit.Command
+            {
+                Advertisement = new Advertisement
+                {
+                    Id = new Guid(),
+                    Title = "test edited",
+                    Date = DateTime.Now,
+                    Description = "test",
+                    CategoryId = new Guid(),
+                    Category = new Category
+                    {
+                        Name = "default"
+                    },
+                    State = "test",
+                    City = "test",
+                    Views = 2,
+                    Price = 0
+                }
+            };
+            context.Setup(m => m.Advertisements).Returns(dbSet.Object);
+            dbSet.Setup(m => m.FindAsync(It.IsAny<Guid>())).ReturnsAsync(savedAdvertisement);
+
+            await handler.Handle(command, new CancellationToken());
+            context.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
+
     }
 }
