@@ -27,6 +27,21 @@ namespace ElasticSearch.Indexing
             return await PerfomIndexing(client, documentList);
         }
 
+        public override async Task<int> DeleteDocuments(IElasticClient client, List<Guid> ids)
+        { 
+            var bulkResponse = await client.BulkAsync(b => b
+                .Index(Name)
+                .DeleteMany(ids.Select(id => new AdvertisementSearchDocument{Id = id}))
+            );
+            
+            if (bulkResponse.Errors)
+            {
+                // Handle error...
+            }
+            
+            return bulkResponse.Items.Count; 
+        }
+
         // internal override Task<int> IndexAsync<T>(IElasticClient client, List<T> documents) where T: class
         // {
         //     var documentList = new List<AdvertisementSearchDocument>();

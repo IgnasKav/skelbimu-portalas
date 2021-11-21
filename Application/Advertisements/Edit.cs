@@ -40,11 +40,6 @@ namespace Application.Advertisements
                     throw new Exception("Advertisement does not exist");
                 }
 
-                if (request.Advertisement.Views < advertisement.Views)
-                {
-                    throw new Exception("Cant decrease advertisement views");
-                }
-
                 _mapper.Map(request.Advertisement, advertisement);
                 
                 await _context.SaveChangesAsync();

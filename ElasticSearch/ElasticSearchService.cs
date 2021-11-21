@@ -15,6 +15,7 @@ namespace ElasticSearch
         IElasticClient Client { get; }
         public Task<int> CreateIndex(IndexDefinition index);
         public Task<int> Reindex(IndexDefinition index, List<Guid> ids = null);
+        public Task<int> DeleteDocuments(IndexDefinition index, List<Guid> ids = null);
         public Task<ElasticSearchResults<T>> Search<T>(IndexDefinition index, string query)
             where T : SearchDocumentBase;
         public Task<int> DeleteIndex(IndexDefinition index);
@@ -32,8 +33,8 @@ namespace ElasticSearch
             _options = options;
             _context = context;
 
-            var connectoinPool = new SingleNodeConnectionPool(new Uri(options.Url));
-            var settings = new ConnectionSettings(connectoinPool);
+            var connectionPool = new SingleNodeConnectionPool(new Uri(options.Url));
+            var settings = new ConnectionSettings(connectionPool);
 
             Client = new ElasticClient(settings);
         }
@@ -57,6 +58,18 @@ namespace ElasticSearch
 
             return 0;
         }
+
+        public async Task<int> DeleteDocuments(IndexDefinition index, List<Guid> ids = null)
+        {
+            const int batchSize = 100;
+            if (ids != null || ids.Any() || ids.Count < batchSize)
+            {
+                return await index.DeleteDocuments(Client, ids);
+            }
+
+            return 0;
+        }
+
         //pakeist query
         public async Task<ElasticSearchResults<T>> Search<T>(IndexDefinition index, string query)
         where T : SearchDocumentBase

@@ -35,7 +35,7 @@ namespace Application.Advertisements
                 _context.Advertisements.Remove(advertisement);
                 
                 await _context.SaveChangesAsync();
-                await _es.Reindex(IndexDefinition.Advertisement, new List<Guid> {advertisement.Id});
+                await _es.DeleteDocuments(IndexDefinition.Advertisement, new List<Guid> {advertisement.Id});
                 
                 return Unit.Value;
             }

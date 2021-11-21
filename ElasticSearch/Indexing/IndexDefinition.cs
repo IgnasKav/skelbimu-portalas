@@ -13,6 +13,7 @@ namespace ElasticSearch.Indexing
         public abstract string Name { get; }
         public abstract Task<CreateIndexResponse> Create(IElasticClient client);
         internal abstract Task<int> IndexAsync(IElasticClient client, DataContext context, List<Guid> ids);
+        public abstract Task<int> DeleteDocuments(IElasticClient client, List<Guid> ids);
         // internal abstract Task<int> IndexAsync<T>(IElasticClient client, List<T> documents) where T: class;
         public static AdvertisementIndexDefinition Advertisement => new AdvertisementIndexDefinition();
         public static IEnumerable<IndexDefinition> All
