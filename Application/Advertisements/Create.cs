@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
 using ElasticSearch;
+using ElasticSearch.Indexing;
 using MediatR;
 using Persistence;
 
@@ -48,9 +50,10 @@ namespace Application.Advertisements
                     throw new Exception("Date must be today");
                 }
 
-                _context.Advertisements.Add(request.Advertisement);
-                
+                var advertisement = _context.Advertisements.Add(request.Advertisement);
+
                 await _context.SaveChangesAsync();
+                await _es.Reindex(IndexDefinition.Advertisement, new List<Guid> {advertisement.Entity.Id});
                 
                 return Unit.Value;
             }

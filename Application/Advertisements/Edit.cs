@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
 using ElasticSearch;
+using ElasticSearch.Indexing;
 using MediatR;
 using Persistence;
 
@@ -46,6 +48,7 @@ namespace Application.Advertisements
                 _mapper.Map(request.Advertisement, advertisement);
                 
                 await _context.SaveChangesAsync();
+                await _es.Reindex(IndexDefinition.Advertisement, new List<Guid> {advertisement.Id});
 
                 return Unit.Value;
             }

@@ -7,7 +7,6 @@ using Elasticsearch.Net;
 using ElasticSearch.SearchDocuments;
 using Nest;
 using Persistence;
-using Index = Nest.Index;
 
 namespace ElasticSearch
 {
@@ -69,7 +68,7 @@ namespace ElasticSearch
                         .Query(
                     q => q.Match(
                         m => m.Field(
-                            f => f.Title)
+                            f => f.SearchText)
                             .Query(query))));
             var results = new ElasticSearchResults<T>()
             {

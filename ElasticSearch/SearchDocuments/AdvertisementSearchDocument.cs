@@ -8,6 +8,7 @@ namespace ElasticSearch.SearchDocuments
     [ElasticsearchType(RelationName = "advertisement")]
     public class AdvertisementSearchDocument: SearchDocumentBase
     {
+        public string Title { get; set; }
         public DateTime Date { get; set; }
         [Text]
         public string Description { get; set; }
@@ -25,14 +26,15 @@ namespace ElasticSearch.SearchDocuments
             var result = new AdvertisementSearchDocument()
             {
                 Id = advertisement.Id,
-                Title = $"{advertisement.Title} {advertisement.Description}",
+                Title = advertisement.Title,
                 Date = advertisement.Date,
                 Description = advertisement.Description,
                 State = advertisement.State,
                 City = advertisement.City,
                 Views = advertisement.Views,
                 Price = advertisement.Price,
-                Category = AdvertisementCategory.Map(advertisement.Category)
+                Category = AdvertisementCategory.Map(advertisement.Category),
+                SearchText = $"{advertisement.Title} {advertisement.Description}"
             };
 
             return result;
