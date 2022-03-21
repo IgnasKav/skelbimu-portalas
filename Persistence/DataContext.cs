@@ -1,3 +1,4 @@
+using System;
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,11 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Advertisement>().Property(a => a.State)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (AdvertisementState)Enum.Parse(typeof(AdvertisementState), v));
+            
             base.OnModelCreating(builder);
         }
     }

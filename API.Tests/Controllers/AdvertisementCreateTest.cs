@@ -42,7 +42,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -72,7 +72,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -96,7 +96,7 @@ namespace API.Tests.Controllers
                     Date = DateTime.Now,
                     Description = "test",
                     CategoryId = new Guid(),
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -124,7 +124,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 2,
                     Price = 0  
@@ -152,7 +152,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -180,7 +180,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0
@@ -210,7 +210,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0
@@ -240,7 +240,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "",
                     Views = 0,
                     Price = 0

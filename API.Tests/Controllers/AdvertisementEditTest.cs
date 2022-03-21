@@ -46,7 +46,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -73,7 +73,7 @@ namespace API.Tests.Controllers
                 {
                     Name = "deafault"
                 },
-                State = "test",
+                State = AdvertisementState.Approved,
                 City = "test",
                 Views = 2,
                 Price = 0
@@ -92,7 +92,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "deafault"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 1,
                     Price = 0  
@@ -119,7 +119,7 @@ namespace API.Tests.Controllers
                 {
                     Name = "default"
                 },
-                State = "test",
+                State = AdvertisementState.Approved,
                 City = "test",
                 Views = 2,
                 Price = 0
@@ -138,7 +138,7 @@ namespace API.Tests.Controllers
                     {
                         Name = "default"
                     },
-                    State = "test",
+                    State = AdvertisementState.Approved,
                     City = "test",
                     Views = 2,
                     Price = 0

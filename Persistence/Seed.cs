@@ -51,7 +51,7 @@ namespace Persistence
                     Date = DateTime.Now.AddMonths(-2),
                     Description = "naujas telefonas",
                     CategoryId = defaultCategory.Id,
-                    State = "Patvirtintas",
+                    State = AdvertisementState.Approved,
                     City = "Kaunas",
                     Views = 0,
                     Price = 20
@@ -62,7 +62,7 @@ namespace Persistence
                     Date = DateTime.Now.AddMonths(-1),
                     Description = "naudotas arbatinukas",
                     CategoryId = defaultCategory.Id,
-                    State = "Patvirtintas",
+                    State = AdvertisementState.Approved,
                     City = "Vilnius",
                     Views = 2,
                     Price = 30
@@ -73,7 +73,7 @@ namespace Persistence
                     Date = DateTime.Now.AddMonths(1),
                     Description = "naudotas siurblys",
                     CategoryId = defaultCategory.Id,
-                    State = "Patvirtintas",
+                    State = AdvertisementState.Approved,
                     City = "Vilnius",
                     Views = 8,
                     Price = 15
@@ -84,7 +84,7 @@ namespace Persistence
                     Date = DateTime.Now.AddMonths(2),
                     Description = "zaidimu kompiuteris",
                     CategoryId = defaultCategory.Id,
-                    State = "Patvirtintas",
+                    State = AdvertisementState.Approved,
                     City = "Utena",
                     Views = 4,
                     Price = 500
@@ -95,7 +95,7 @@ namespace Persistence
                     Date = DateTime.Now.AddMonths(3),
                     Description = "Klaviatura",
                     CategoryId = defaultCategory.Id,
-                    State = "Patvirtintas",
+                    State = AdvertisementState.Approved,
                     City = "Kaunas",
                     Views = 7,
                     Price = 50

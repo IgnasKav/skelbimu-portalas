@@ -12,8 +12,7 @@ namespace ElasticSearch.SearchDocuments
         public DateTime Date { get; set; }
         [Text]
         public string Description { get; set; }
-        [Text]
-        public string State { get; set; }
+        public AdvertisementState State { get; set; }
         [Text]
         public string City { get; set; }
         public int Views { get; set; }

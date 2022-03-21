@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -27,12 +29,12 @@ namespace Application.Categories
             }
 
             public async Task<List<CategoryDto>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var categories = await _context.Categories
-                    .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+            {  
+                var categories = await _context.Categories.ToListAsync(cancellationToken);
+                var filteredCategories = categories.FindAll(category => category.ParentId == null);
+                var categoriesDto = _mapper.Map<List<Category>, List<CategoryDto>>(filteredCategories);
 
-                return categories;
+                return categoriesDto;
             }
         }
     }

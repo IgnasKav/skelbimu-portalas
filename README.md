@@ -4,6 +4,9 @@
     .NET latest version, you can download it from here: https://dotnet.microsoft.com/download
   </li>
   <li>
+    if you are using mac, also add this path to your .zshrc file(or terminal file that you are using): export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
+  </li>
+  <li>
     IDE which supports .NET, I recommend using Visual Studio or Rider
   </li>
 </ul>
@@ -25,6 +28,15 @@
 </ul>
 
 <h1>Migrations</h1>
+<h3>Install entity framework</h3>
+<ul>
+  <li>
+  if you do not have entity framework isntalled, run: dotnet tool install --global dotnet-ef
+  </li>
+  <li>
+  if you are using mac, also add this path to your .zshrc file(or terminal file that you are using): export PATH="$PATH:/Users/ignaskavaliauskas/.dotnet/tools"
+  </li>
+</ul>
 <h3>To add a database migration, execute following command in "Reactivities" directory</h3>
 <ul>
   <li>

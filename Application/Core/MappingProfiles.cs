@@ -17,10 +17,7 @@ namespace Application.Core
                 .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category));
             CreateMap<AdvertisementSearchDocument, AdvertisementDto>();
             CreateMap<AdvertisementCategory, CategoryDto>();
-            CreateMap<Category, CategoryDto>()
-                .ForMember(d => d.id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.name, o => o.MapFrom(s => s.Name))
-                .ForMember(d => d.parentId, o => o.MapFrom(s => s.ParentId));
+            CreateMap<Category, CategoryDto>().PreserveReferences();
         }
     }
 }

@@ -7,5 +7,7 @@ namespace Application.Categories
         public Guid id { get; set; }
         public string name { get; set; }
         public Guid parentId { get; set; }
+
+        public CategoryDto[] children { get; set; }
     }
 }
