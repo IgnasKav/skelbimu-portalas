@@ -25,9 +25,10 @@ namespace API
             try {
                 var context = services.GetRequiredService<DataContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
+                var userRoleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var elastic = services.GetRequiredService<IElasticSearchService>();
                 await context.Database.MigrateAsync();
-                await Seed.SeedData(context, userManager);
+                await Seed.SeedData(context, userManager, userRoleManager);
                 await ElasticSeed.ElasticStartup(context, elastic);
             }
             catch (Exception ex) {

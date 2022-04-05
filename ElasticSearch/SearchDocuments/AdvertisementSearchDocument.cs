@@ -20,6 +20,8 @@ namespace ElasticSearch.SearchDocuments
         [Nested]
         public AdvertisementCategory Category { get; set; }
 
+        public Guid OwnerId { get; set; }
+
         internal static AdvertisementSearchDocument Map(Advertisement advertisement)
         {
             var result = new AdvertisementSearchDocument()
@@ -32,6 +34,7 @@ namespace ElasticSearch.SearchDocuments
                 City = advertisement.City,
                 Views = advertisement.Views,
                 Price = advertisement.Price,
+                OwnerId = advertisement.OwnerId,
                 Category = AdvertisementCategory.Map(advertisement.Category),
                 SearchText = $"{advertisement.Title} {advertisement.Description}"
             };

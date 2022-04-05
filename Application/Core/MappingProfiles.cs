@@ -9,7 +9,6 @@ namespace Application.Core
 {
     public class MappingProfiles: Profile
     {
-        //sutvarkyt mappingus (pazet docs)
         public MappingProfiles()
         {
             CreateMap<Advertisement, Advertisement>();

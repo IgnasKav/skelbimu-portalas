@@ -10,14 +10,22 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context, UserManager<User> userManager)
+        public static async Task SeedData(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            await CreateUsers(userManager);
+            await CreateUserRoles(userManager, roleManager);
+            await CreateCategories(context);
+            await CreateAdvertisements(context, userManager);
+        }
+
+        private static async Task CreateUsers(UserManager<User> userManager)
         {
             if (!userManager.Users.Any())
             {
                 var users = new List<User>
                 {
-                    new User {DisplayName = "Rokas", UserName = "rok45", Email = "rok45@local.com"},
                     new User {DisplayName = "Ignas", UserName = "IgnasKav", Email = "ignas.kavaliauskas5@gmail.com"},
+                    new User {DisplayName = "Rokas", UserName = "rok45", Email = "rok45@local.com"},
                     new User {DisplayName = "Matas", UserName = "Mat42Bo55", Email = "mat42boss@gmail.com"},
                 };
 
@@ -26,31 +34,140 @@ namespace Persistence
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
+        }
 
-            if (!context.Categories.Any())
+        private static async Task CreateUserRoles(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            if (roleManager.Roles.Any())
             {
-                var category = new Category
-                {
-                    Name = "default",
-                };
-                
-                await context.Categories.AddAsync(category);
-                await context.SaveChangesAsync();
+                return;
             }
 
+            string[] userRoles = {"Admin", "Support", "User"};
+            var users = userManager.Users.ToList();
+
+            foreach (var role in userRoles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            foreach (var user in users)
+            {
+                switch (user.Email)
+                {
+                    case "ignas.kavaliauskas5@gmail.com":
+                        await userManager.AddToRoleAsync(user, "Admin");
+                        break;
+                    case "rok45@local.com": 
+                        await userManager.AddToRoleAsync(user, "Support");
+                        break;
+                    default:
+                        await userManager.AddToRoleAsync(user, "User");
+                        break;
+                }
+            }
+        }
+
+        private static async Task CreateCategories(DataContext context)
+        {
+            if (!context.Categories.Any())
+            {
+                var phones = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Phones",
+                };
+
+                var applePhones = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Apple",
+                    ParentId = phones.Id
+                };
+
+                var googlePhones = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Google",
+                    ParentId = phones.Id
+                };
+                
+                var iphone11 = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Iphone 11",
+                    ParentId = applePhones.Id
+                };
+
+                var iphone12 = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Iphone 12",
+                    ParentId = applePhones.Id
+                };
+
+                var pixel = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Pixel",
+                    ParentId = googlePhones.Id
+                };
+
+                var computers = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Computers"
+                };
+
+                var appleComputers = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Apple",
+                    ParentId = computers.Id
+                };
+
+                var macbook = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "MacBook",
+                    ParentId = appleComputers.Id
+                };
+
+                var categories = new List<Category>
+                    {phones, applePhones, googlePhones, iphone11, iphone12, pixel, computers, appleComputers, macbook};
+
+
+                await context.Categories.AddRangeAsync(categories);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task CreateAdvertisements(DataContext context, UserManager<User> userManager)
+        {
             if (context.Advertisements.Any()) return;
 
+            var advertisementOwner = await userManager.FindByEmailAsync("ignas.kavaliauskas5@gmail.com");
+
             var categoryList = await context.Categories.ToListAsync();
-            var defaultCategory = categoryList[0];
+
+            var iphone11Category = categoryList.FirstOrDefault(c => c.Name == "Iphone 11");
+            var iphone12Category = categoryList.FirstOrDefault(c => c.Name == "Iphone 12");
+            var pixelCategory = categoryList.FirstOrDefault(c => c.Name == "Pixel");
+            var macBookCategory = categoryList.FirstOrDefault(c => c.Name == "MacBook");
+            
 
             var advertisements = new List<Advertisement>
             {
                 new Advertisement
                 {
-                    Title = "Skelbimas 1",
+                    Title = "Iphone 12",
                     Date = DateTime.Now.AddMonths(-2),
-                    Description = "naujas telefonas",
-                    CategoryId = defaultCategory.Id,
+                    Description = "Selling used Apple Iphone 12.",
+                    CategoryId = iphone12Category.Id,
+                    OwnerId = new Guid(advertisementOwner.Id),
                     State = AdvertisementState.Approved,
                     City = "Kaunas",
                     Views = 0,
@@ -58,10 +175,11 @@ namespace Persistence
                 },
                 new Advertisement
                 {
-                    Title = "Skelbimas 2",
+                    Title = "Pixel",
                     Date = DateTime.Now.AddMonths(-1),
-                    Description = "naudotas arbatinukas",
-                    CategoryId = defaultCategory.Id,
+                    Description = "Used Pixel phone.",
+                    CategoryId = pixelCategory.Id,
+                    OwnerId = new Guid(advertisementOwner.Id),
                     State = AdvertisementState.Approved,
                     City = "Vilnius",
                     Views = 2,
@@ -69,10 +187,11 @@ namespace Persistence
                 },
                 new Advertisement
                 {
-                    Title = "Skelbimas 3",
+                    Title = "Apple Macbook 2019",
                     Date = DateTime.Now.AddMonths(1),
-                    Description = "naudotas siurblys",
-                    CategoryId = defaultCategory.Id,
+                    Description = "Almost ideal 2019 macbook pro 16 inch",
+                    CategoryId = macBookCategory.Id,
+                    OwnerId = new Guid(advertisementOwner.Id),
                     State = AdvertisementState.Approved,
                     City = "Vilnius",
                     Views = 8,
@@ -80,10 +199,11 @@ namespace Persistence
                 },
                 new Advertisement
                 {
-                    Title = "Skelbimas 4",
+                    Title = "Iphone 11",
                     Date = DateTime.Now.AddMonths(2),
-                    Description = "zaidimu kompiuteris",
-                    CategoryId = defaultCategory.Id,
+                    Description = "Selling used iphone 11, great condition",
+                    CategoryId = iphone11Category.Id,
+                    OwnerId = new Guid(advertisementOwner.Id),
                     State = AdvertisementState.Approved,
                     City = "Utena",
                     Views = 4,
@@ -91,14 +211,15 @@ namespace Persistence
                 },
                 new Advertisement
                 {
-                    Title = "Skelbimas 5",
+                    Title = "MacBook pro m1 max 2021",
                     Date = DateTime.Now.AddMonths(3),
-                    Description = "Klaviatura",
-                    CategoryId = defaultCategory.Id,
+                    Description = "Screen size: 16 inch, Ram: 32GB, SSD: 1TB",
+                    CategoryId = macBookCategory.Id,
+                    OwnerId = new Guid(advertisementOwner.Id),
                     State = AdvertisementState.Approved,
                     City = "Kaunas",
                     Views = 7,
-                    Price = 50
+                    Price = 3250
                 }
             };
 

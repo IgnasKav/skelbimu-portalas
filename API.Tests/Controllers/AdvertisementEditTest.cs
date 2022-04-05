@@ -5,6 +5,9 @@ using Application.Advertisements;
 using AutoMapper;
 using Domain;
 using ElasticSearch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Persistence;
@@ -15,10 +18,13 @@ namespace API.Tests.Controllers
     public class AdvertisementEditTest
     {
         private readonly Mock<DbSet<Advertisement>> dbSet;
+        private readonly Mock<IAuthorizationService> authorizationService;
         private readonly Mock<DataContext> context;
         private readonly Mock<IElasticSearchService> es;
         private readonly Mock<IMapper> mapper;
         private readonly Edit.Handler handler;
+        private readonly Mock<UserManager<User>> userManager;
+        private readonly Mock<IHttpContextAccessor> httpContextAccessor;
 
         public AdvertisementEditTest()
         {
@@ -27,7 +33,11 @@ namespace API.Tests.Controllers
             context = new Mock<DataContext>(options);
             es = new Mock<IElasticSearchService>();
             mapper = new Mock<IMapper>();
-            handler = new Edit.Handler(context.Object, mapper.Object, es.Object);
+            userManager = new Mock<UserManager<User>>();
+            authorizationService = new Mock<IAuthorizationService>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+            
+            //handler = new Edit.Handler(httpContextAccessor.Object, context.Object, mapper.Object, es.Object, authorizationService.Object, userManager.Object); 
         }
         
         [Fact]
