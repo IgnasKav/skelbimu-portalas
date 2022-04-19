@@ -18,7 +18,7 @@ namespace Application.Advertisements
     {
         public class Command : IRequest
         {
-            public Advertisement Advertisement { get; set; }
+            public AdvertisementDto Advertisement { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>

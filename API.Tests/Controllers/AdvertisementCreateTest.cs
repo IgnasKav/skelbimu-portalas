@@ -24,7 +24,7 @@ namespace API.Tests.Controllers
             var options = new DbContextOptionsBuilder<DataContext>().Options;
             context = new Mock<DataContext>(options);
             es = new Mock<IElasticSearchService>();
-            handler = new Create.Handler(context.Object, es.Object);
+            // handler = new Create.Handler(context.Object, es.Object);
         }
 
         [Fact]
@@ -32,17 +32,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -62,17 +62,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -90,13 +90,13 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -114,17 +114,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 2,
                     Price = 0  
@@ -142,17 +142,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now.AddDays(2),
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -170,17 +170,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0
@@ -200,17 +200,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0
@@ -230,17 +230,17 @@ namespace API.Tests.Controllers
         {
             var command = new Create.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "",
                     Views = 0,
                     Price = 0

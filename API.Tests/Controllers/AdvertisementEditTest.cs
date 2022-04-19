@@ -45,18 +45,18 @@ namespace API.Tests.Controllers
         {
             var command = new Edit.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Id = new Guid(),
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 0,
                     Price = 0  
@@ -91,18 +91,18 @@ namespace API.Tests.Controllers
             
             var command = new Edit.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Id = new Guid(),
                     Title = "test",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "deafault"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "deafault"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 1,
                     Price = 0  
@@ -137,18 +137,18 @@ namespace API.Tests.Controllers
 
             var command = new Edit.Command
             {
-                Advertisement = new Advertisement
+                Advertisement = new AdvertisementDto
                 {
                     Id = new Guid(),
                     Title = "test edited",
                     Date = DateTime.Now,
                     Description = "test",
-                    CategoryId = new Guid(),
-                    Category = new Category
-                    {
-                        Name = "default"
-                    },
-                    State = AdvertisementState.Approved,
+                    // CategoryId = new Guid(),
+                    // Category = new Category
+                    // {
+                    //     Name = "default"
+                    // },
+                    // State = AdvertisementState.Approved,
                     City = "test",
                     Views = 2,
                     Price = 0

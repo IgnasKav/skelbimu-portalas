@@ -27,18 +27,18 @@ namespace API.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateAdvertisement(Advertisement advertisement)
+        public async Task<IActionResult> CreateAdvertisement(AdvertisementDto advertisement)
         {
             return Ok(await Mediator.Send(new Create.Command{Advertisement = advertisement}));
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAdvertisement(Guid id, Advertisement advertisement)
+        public async Task<IActionResult> UpdateAdvertisement(Guid id, AdvertisementDto advertisement)
         {
             advertisement.Id = id;
             return Ok(await Mediator.Send(new Edit.Command{Advertisement = advertisement}));
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdvertisement(Guid id)
         {
