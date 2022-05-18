@@ -21,10 +21,26 @@ namespace ElasticSearch.Indexing
             var documentList = new List<AdvertisementSearchDocument>();
             foreach (var advertisement in advertisements)
             {
+                var shallowCategory = await context.Categories.FindAsync(advertisement.CategoryId);
+                var category = await GetCategoryRecursively(shallowCategory.Id, context);
+                advertisement.Category = category;
                 documentList.Add(AdvertisementSearchDocument.Map(advertisement));
             }
 
             return await PerfomIndexing(client, documentList);
+        }
+
+        public async Task<Category> GetCategoryRecursively(Guid categoryId, DataContext context)
+        {
+            var category = await context.Categories.FindAsync(categoryId);
+
+            if (category.ParentId.HasValue && category.ParentId != Guid.Empty)
+            {
+                var parent = await GetCategoryRecursively(category.ParentId.Value, context);
+                category.Parent = parent;
+            }
+
+            return category;
         }
 
         // internal override Task<int> IndexAsync<T>(IElasticClient client, List<T> documents) where T: class
@@ -43,7 +59,11 @@ namespace ElasticSearch.Indexing
         {
             return await client.Indices.CreateAsync(Name,
                 i => i.Settings(CommonIndexDescriptor)
-                    .Map<AdvertisementSearchDocument>(map => map.AutoMap()));
+                    .Map<AdvertisementSearchDocument>(map => map.AutoMap()
+                        .Properties(p => p
+                            .Text(t => t
+                                .Name(n => n.CategoryFilter)
+                                .Analyzer("whitespace")))));
         }
     }
 }

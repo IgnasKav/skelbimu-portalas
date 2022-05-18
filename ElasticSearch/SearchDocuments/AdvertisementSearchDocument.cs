@@ -9,6 +9,7 @@ namespace ElasticSearch.SearchDocuments
     public class AdvertisementSearchDocument: SearchDocumentBase
     {
         public string Title { get; set; }
+        public string CategoryFilter { get; set; }
         public DateTime Date { get; set; }
         [Text]
         public string Description { get; set; }
@@ -28,6 +29,7 @@ namespace ElasticSearch.SearchDocuments
             {
                 Id = advertisement.Id,
                 Title = advertisement.Title,
+                CategoryFilter = CreateCategoryFilter(advertisement.Category),
                 Date = advertisement.Date,
                 Description = advertisement.Description,
                 State = advertisement.State,
@@ -40,6 +42,22 @@ namespace ElasticSearch.SearchDocuments
             };
 
             return result;
+        }
+
+        public static string CreateCategoryFilter(Category category)
+        {
+            var currentElement = category;
+            string categoryFilter = "";
+
+            while (currentElement.Parent != null)
+            {
+                categoryFilter += $"{currentElement.Name} ";
+                currentElement = currentElement.Parent;
+                
+            }
+            categoryFilter += $"{currentElement.Name} ";
+
+            return categoryFilter;
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using Application.Advertisements;
 using Application.Core;
 using ElasticSearch;
@@ -28,7 +30,7 @@ namespace API.Extensions
                     policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
                 });
             });
-            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             
             ElasticSearchOptions elasticSearchOptions = new ElasticSearchOptions();

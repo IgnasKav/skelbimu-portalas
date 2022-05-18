@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Advertisements;
+using Application.Advertisements.WatchLater;
 using Domain;
 using ElasticSearch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,9 @@ namespace API.Controllers
         [HttpPost("search")]
         public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisements(ElasticSearchRequest request)
         {
-            return await Mediator.Send(new List.Query{SearchText = request.Query});
+            return await Mediator.Send(new List.Query{ElasticSearchRequest = request});
         }
+        
         [HttpGet("list/{id}")]
         public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisementsByCategory(Guid id)
         {
@@ -31,7 +33,13 @@ namespace API.Controllers
         {
             return Ok(await Mediator.Send(new Create.Command{Advertisement = advertisement}));
         }
-        
+
+        [HttpPut("{id}/watchLater")]
+        public async Task<IActionResult> AddtoWatchLater(WatchLaterDto request)
+        {
+            return Ok(await Mediator.Send(new AddToWatchLater.Command{WatchLater = request}));
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdvertisement(Guid id, AdvertisementDto advertisement)
         {

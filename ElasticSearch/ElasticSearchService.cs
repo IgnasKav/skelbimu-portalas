@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain;
 using ElasticSearch.Indexing;
 using Elasticsearch.Net;
 using ElasticSearch.SearchDocuments;
@@ -16,7 +15,7 @@ namespace ElasticSearch
         IElasticClient Client { get; }
         public Task<int> CreateIndex(IndexDefinition index);
         public Task<int> Reindex(IndexDefinition index, List<Guid> ids = null);
-        public Task<ElasticSearchResults<T>> Search<T>(string query, List<QueryContainer> filters = null)
+        public Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest query, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
             where T : SearchDocumentBase;
         public Task<int> DeleteIndex(IndexDefinition index);
         public Task<bool> IndexExists(IndexDefinition index);
@@ -34,7 +33,9 @@ namespace ElasticSearch
             _context = context;
 
             var connectoinPool = new SingleNodeConnectionPool(new Uri(options.Url));
-            var settings = new ConnectionSettings(connectoinPool).DefaultMappingFor<AdvertisementSearchDocument>(m => m.IndexName(IndexDefinition.Advertisement.Name));
+            var settings = new ConnectionSettings(connectoinPool)
+                .DefaultMappingFor<AdvertisementSearchDocument>(m => m
+                .IndexName(IndexDefinition.Advertisement.Name));
 
             Client = new ElasticClient(settings);
         }
@@ -60,7 +61,7 @@ namespace ElasticSearch
         }
         //pakeist query
         //aggregations tinka tik skelbimams
-        public async Task<ElasticSearchResults<T>> Search<T>(string query, List<QueryContainer> filters = null)
+        public async Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest request, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
         where T : SearchDocumentBase
         {
 
@@ -71,10 +72,16 @@ namespace ElasticSearch
                     new MatchQuery()
                     {
                         Field = Infer.Field<AdvertisementSearchDocument>(f => f.SearchText),
-                        Query = query
+                        Query = request.Query
                     }
-                }
+                },
             };
+
+            if (categoriesFilter != null && categoriesFilter.Count > 0)
+            {
+                boolQuery.Should = categoriesFilter;
+                boolQuery.MinimumShouldMatch = 1;
+            }
 
             if (filters != null && filters.Count > 0)
             {
@@ -88,7 +95,9 @@ namespace ElasticSearch
             var searchRequest = new SearchRequest<AdvertisementSearchDocument>
             {
                 Query = boolQuery,
-                Aggregations = aggregationContainer.Aggregations
+                Aggregations = aggregationContainer.Aggregations,
+                From = 0,
+                Size = 50
             };
             
             var searchResponse = await Client.SearchAsync<T>(searchRequest);
@@ -97,7 +106,7 @@ namespace ElasticSearch
                 Total = (int)searchResponse.Total,
                 Items = searchResponse.Documents.ToList(),
                 DebugInformation = searchResponse.DebugInformation,
-                Query = query
+                Query = request.Query
             };
                 
             return results;

@@ -67,7 +67,9 @@ namespace API.Tests.Controllers
 
             mockUserManager.Setup(userManager => userManager.FindByEmailAsync(loginDto.Email)).ReturnsAsync(user);
 
-            mockSignInManager.Setup(signInManager => signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).ReturnsAsync(SignInResult.Failed);
+            mockSignInManager.Setup(signInManager => signInManager
+                .CheckPasswordSignInAsync(user, loginDto.Password, false))
+                .ReturnsAsync(SignInResult.Failed);
             
             var result = await controller.Login(loginDto);
 
@@ -89,7 +91,9 @@ namespace API.Tests.Controllers
 
             mockUserManager.Setup(userManager => userManager.FindByEmailAsync(loginDto.Email)).ReturnsAsync(user);
 
-            mockSignInManager.Setup(signInManager => signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false)).ReturnsAsync(SignInResult.Success);
+            mockSignInManager.Setup(signInManager => signInManager
+                .CheckPasswordSignInAsync(user, loginDto.Password, false))
+                .ReturnsAsync(SignInResult.Success);
 
             mockTokenService.Setup(tokenService => tokenService.CreateToken(user)).Returns("token123");
 

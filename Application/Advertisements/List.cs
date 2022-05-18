@@ -1,21 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain;
 using ElasticSearch;
-using ElasticSearch.Indexing;
 using ElasticSearch.SearchDocuments;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Nest;
-using Persistence;
 
 namespace Application.Advertisements
 {
@@ -23,7 +18,7 @@ namespace Application.Advertisements
     {
         public class Query : MediatR.IRequest<List<AdvertisementDto>>
         {
-            public string SearchText { get; set; }
+            public ElasticSearchRequest ElasticSearchRequest { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<AdvertisementDto>>
@@ -51,7 +46,7 @@ namespace Application.Advertisements
 
                 var filters = new List<QueryContainer>();
 
-                if (!userRoles.Contains("Admin") && !userRoles.Contains("Support"))
+                if (!userRoles.Contains("Admin") && !userRoles.Contains("Support") && string.IsNullOrWhiteSpace(request.ElasticSearchRequest.UserId))
                 {
                     var advertisementStatusFilter = new TermQuery
                     {
@@ -62,8 +57,35 @@ namespace Application.Advertisements
                     filters.Add(advertisementStatusFilter);
                 }
 
+                if (!string.IsNullOrWhiteSpace(request.ElasticSearchRequest.UserId))
+                {
+                    var userIdFilter = new MatchQuery()
+                    {
+                        Field = Infer.Field<AdvertisementSearchDocument>(f => f.OwnerId),
+                        Query = request.ElasticSearchRequest.UserId
+                    };
+                    
+                    filters.Add(userIdFilter);
+                }
 
-                var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.SearchText, filters);
+                var categoriesFilter = new List<QueryContainer>();
+
+                if (request.ElasticSearchRequest.CategoryFilters != null)
+                {
+                    foreach (var categoryFilter in request.ElasticSearchRequest.CategoryFilters)
+                    {
+                        var elasticFilter = new MatchQuery
+                        {
+                            Field = Infer.Field<AdvertisementSearchDocument>(f => f.CategoryFilter),
+                            Query = categoryFilter.CategoryFilter,
+                            Operator = Operator.And
+                        };
+                    
+                        categoriesFilter.Add(elasticFilter);
+                    }
+                }
+
+                var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.ElasticSearchRequest, filters, categoriesFilter);
                 var advertisements = elasticResult.Items;
 
                 return _mapper.Map<List<AdvertisementSearchDocument>, List<AdvertisementDto>>(advertisements);
