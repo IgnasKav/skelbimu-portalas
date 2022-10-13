@@ -67,9 +67,10 @@ namespace Application.Advertisements
                 }
 
                 _mapper.Map(request.Advertisement, advertisement);
+                advertisement.Date = DateTime.Now;
                 
-                await _context.SaveChangesAsync();
-                await _es.Reindex(IndexDefinition.Advertisement, new List<Guid> {advertisement.Id});
+                await _context.SaveChangesAsync(cancellationToken);
+                await _es.Reindex(IndexDefinition.Advertisement, advertisement.Id);
 
                 return Unit.Value;
             }

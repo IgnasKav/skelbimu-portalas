@@ -5,10 +5,10 @@ namespace ElasticSearch
 {
     public class ElasticSearchRequest
     {
-        public int From { get; set; }
-        public int Size { get; set; }
+        public int Page { get; set; }
         public string Query { get; set; }
         public string? UserId { get; set; }
+        public bool OnlyUnapproved { get; set; } = false;
         public List<ElasticCategoriesFilter>? CategoryFilters { get; set; }
     }
 

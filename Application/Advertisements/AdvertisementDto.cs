@@ -18,5 +18,12 @@ namespace Application.Advertisements
         public int Views { get; set; }
         public decimal Price { get; set; }
         public List<string> Permissions { get; set; }
+        public bool WatchLater { get; set; }
+        public string ImageUrl { get; set; }
+    }
+
+    public class AdvertisementSaveRequest: AdvertisementDto
+    {
+        
     }
 }

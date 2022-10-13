@@ -9,6 +9,7 @@ namespace ElasticSearch.SearchDocuments
     public class AdvertisementSearchDocument: SearchDocumentBase
     {
         public string Title { get; set; }
+        [Text(Analyzer = "whitespace", Name = nameof(CategoryFilter))]
         public string CategoryFilter { get; set; }
         public DateTime Date { get; set; }
         [Text]
@@ -20,10 +21,10 @@ namespace ElasticSearch.SearchDocuments
         public decimal Price { get; set; }
         [Nested]
         public AdvertisementCategory Category { get; set; }
-
         public Guid OwnerId { get; set; }
+        public string ImageUrl { get; set; }
 
-        internal static AdvertisementSearchDocument Map(Advertisement advertisement)
+        internal static AdvertisementSearchDocument Map(Advertisement advertisement, string imageUrl)
         {
             var result = new AdvertisementSearchDocument()
             {
@@ -38,7 +39,8 @@ namespace ElasticSearch.SearchDocuments
                 Price = advertisement.Price,
                 OwnerId = advertisement.OwnerId,
                 Category = AdvertisementCategory.Map(advertisement.Category),
-                SearchText = $"{advertisement.Title} {advertisement.Description}"
+                SearchText = $"{advertisement.Title} {advertisement.Description}",
+                ImageUrl = imageUrl
             };
 
             return result;

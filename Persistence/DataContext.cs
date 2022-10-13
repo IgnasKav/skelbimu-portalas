@@ -14,6 +14,7 @@ namespace Persistence
         public virtual DbSet<Advertisement> Advertisements { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<WatchLater> WatchLater { get; set; }
+        public virtual DbSet<AdvertisementImage> AdvertisementImage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

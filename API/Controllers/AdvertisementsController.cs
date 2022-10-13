@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Advertisements;
+using Application.Advertisements.Images;
 using Application.Advertisements.WatchLater;
 using Domain;
 using ElasticSearch;
@@ -16,7 +17,7 @@ namespace API.Controllers
         {
             return await Mediator.Send(new List.Query{ElasticSearchRequest = request});
         }
-        
+
         [HttpGet("list/{id}")]
         public async Task<ActionResult<List<AdvertisementDto>>> GetAdvertisementsByCategory(Guid id)
         {
@@ -34,12 +35,6 @@ namespace API.Controllers
             return Ok(await Mediator.Send(new Create.Command{Advertisement = advertisement}));
         }
 
-        [HttpPut("{id}/watchLater")]
-        public async Task<IActionResult> AddtoWatchLater(WatchLaterDto request)
-        {
-            return Ok(await Mediator.Send(new AddToWatchLater.Command{WatchLater = request}));
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAdvertisement(Guid id, AdvertisementDto advertisement)
         {
@@ -51,6 +46,24 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteAdvertisement(Guid id)
         {
             return Ok(await Mediator.Send(new Delete.Command{Id = id}));
+        }
+
+        [HttpPut("{id}/watchLater")]
+        public async Task<IActionResult> AddtoWatchLater(WatchLaterDto request)
+        {
+            return Ok(await Mediator.Send(new AddToWatchLater.Command{WatchLater = request}));
+        }
+        
+        [HttpPost("watchLater")]
+        public async Task<ActionResult<List<AdvertisementDto>>> GetWatchLater(ElasticSearchRequest request)
+        {
+            return await Mediator.Send(new WatchLaterList.Query{ElasticSearchRequest = request});
+        }
+
+        [HttpPost("updateImage")]
+        public async Task<ActionResult<string>> UpdateImage([FromForm]AdvertisementImageUpdateRequest request)
+        {
+            return Ok(await Mediator.Send(new UpdateImage.Command{Request = request}));
         }
     }
 }

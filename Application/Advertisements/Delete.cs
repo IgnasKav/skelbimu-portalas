@@ -31,12 +31,11 @@ namespace Application.Advertisements
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 Advertisement advertisement = await _context.Advertisements.FindAsync(request.Id);
+                await _es.DeleteDocument(IndexDefinition.Advertisement, advertisement.Id);
                 
                 _context.Advertisements.Remove(advertisement);
-                
                 await _context.SaveChangesAsync();
-                await _es.Reindex(IndexDefinition.Advertisement, new List<Guid> {advertisement.Id});
-                
+
                 return Unit.Value;
             }
         }

@@ -19,4 +19,9 @@
     <ProjectReference Include="..\ElasticSearch\ElasticSearch.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="images" />
+    <Folder Include="images\baab6d11-d647-4452-8432-8f1a118d1f7f\5da9fb33-647b-4742-9183-86d8cfd54552" />
+  </ItemGroup>
+
 </Project>

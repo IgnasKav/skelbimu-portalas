@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Advertisements.WatchLater
@@ -38,15 +40,26 @@ namespace Application.Advertisements.WatchLater
                 }
         
                 var currentUserId = new Guid(_userManager.GetUserId(currentUserClaim));
-        
-                var watchLater = new Domain.WatchLater
+
+                var watchLater = await _context.WatchLater
+                    .FirstOrDefaultAsync(item => item.AdvertisementId == request.WatchLater.AdvertisementId && item.UserId == currentUserId, cancellationToken);
+
+                if (watchLater != null)
+                {
+                    _context.WatchLater.Remove(watchLater);
+                    await _context.SaveChangesAsync();
+                    return Unit.Value;
+                }
+
+                watchLater = new Domain.WatchLater
                 {
                     Id = new Guid(),
                     UserId = currentUserId,
                     AdvertisementId = request.WatchLater.AdvertisementId
                 };
         
-                await _context.WatchLater.AddAsync(watchLater, cancellationToken);
+                _context.WatchLater.Add(watchLater);
+                await _context.SaveChangesAsync();
 
                 return Unit.Value;
             }

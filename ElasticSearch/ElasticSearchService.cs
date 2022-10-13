@@ -15,14 +15,17 @@ namespace ElasticSearch
         IElasticClient Client { get; }
         public Task<int> CreateIndex(IndexDefinition index);
         public Task<int> Reindex(IndexDefinition index, List<Guid> ids = null);
-        public Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest query, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
+        public Task<int> Reindex(IndexDefinition index, Guid id);
+        public Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest query, List<ISort> sortQuery = null, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
             where T : SearchDocumentBase;
         public Task<int> DeleteIndex(IndexDefinition index);
+        public Task<int> DeleteDocument(IndexDefinition index, Guid advertisementId);
         public Task<bool> IndexExists(IndexDefinition index);
     }
 
     public class ElasticSearchService: IElasticSearchService
     {
+        private int elasticPageSize = 9;
         private readonly ElasticSearchOptions _options;
         private readonly DataContext _context;
         public IElasticClient Client { get; }
@@ -59,19 +62,24 @@ namespace ElasticSearch
 
             return 0;
         }
+
+        public async Task<int> Reindex(IndexDefinition index, Guid id)
+        {
+            return await index.IndexAsync(Client, _context, id);
+        }
+
         //pakeist query
         //aggregations tinka tik skelbimams
-        public async Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest request, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
+        public async Task<ElasticSearchResults<T>> Search<T>(ElasticSearchRequest request, List<ISort> sortQuery = null, List<QueryContainer> filters = null, List<QueryContainer> categoriesFilter = null)
         where T : SearchDocumentBase
         {
-
             var boolQuery = new BoolQuery
             {
                 Must = new List<QueryContainer>
                 {
-                    new MatchQuery()
+                    new QueryStringQuery()
                     {
-                        Field = Infer.Field<AdvertisementSearchDocument>(f => f.SearchText),
+                        Fields = Infer.Field<AdvertisementSearchDocument>(f => f.SearchText),
                         Query = request.Query
                     }
                 },
@@ -92,12 +100,19 @@ namespace ElasticSearch
                 (IAggregationContainer)new AggregationContainerDescriptor<AdvertisementSearchDocument>().Terms("state",
                     x => x.Field(doc => doc.State));
 
+            var from = 0;
+            if (request.Page != 0)
+            {
+                from = ((request.Page - 1) * elasticPageSize) + elasticPageSize;
+            }
+
             var searchRequest = new SearchRequest<AdvertisementSearchDocument>
             {
                 Query = boolQuery,
                 Aggregations = aggregationContainer.Aggregations,
-                From = 0,
-                Size = 50
+                From = from,
+                Size = elasticPageSize,
+                Sort= sortQuery
             };
             
             var searchResponse = await Client.SearchAsync<T>(searchRequest);
@@ -120,6 +135,11 @@ namespace ElasticSearch
             }
 
             return 0;
+        }
+
+        public async Task<int> DeleteDocument(IndexDefinition index, Guid advertisementId)
+        {
+            return await index.DeleteDocument(Client, _context, advertisementId);
         }
 
         public async Task<bool> IndexExists(IndexDefinition index)

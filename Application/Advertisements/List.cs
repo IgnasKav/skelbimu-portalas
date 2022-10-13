@@ -45,8 +45,19 @@ namespace Application.Advertisements
                 var userRoles = (await _userManager.GetRolesAsync(currentUser)).ToList();
 
                 var filters = new List<QueryContainer>();
+                var categoriesFilter = new List<QueryContainer>();
 
-                if (!userRoles.Contains("Admin") && !userRoles.Contains("Support") && string.IsNullOrWhiteSpace(request.ElasticSearchRequest.UserId))
+                if (userRoles.Contains("Admin") && request.ElasticSearchRequest.OnlyUnapproved)
+                {
+                    var advertisementStatusFilter = new TermQuery
+                    {
+                        Field = Infer.Field<AdvertisementSearchDocument>(f => f.State),
+                        Value = AdvertisementState.New
+                    };
+                    
+                    filters.Add(advertisementStatusFilter);
+                }
+                else if (!userRoles.Contains("Admin") && !userRoles.Contains("Support") && string.IsNullOrWhiteSpace(request.ElasticSearchRequest.UserId))
                 {
                     var advertisementStatusFilter = new TermQuery
                     {
@@ -68,8 +79,6 @@ namespace Application.Advertisements
                     filters.Add(userIdFilter);
                 }
 
-                var categoriesFilter = new List<QueryContainer>();
-
                 if (request.ElasticSearchRequest.CategoryFilters != null)
                 {
                     foreach (var categoryFilter in request.ElasticSearchRequest.CategoryFilters)
@@ -84,8 +93,17 @@ namespace Application.Advertisements
                         categoriesFilter.Add(elasticFilter);
                     }
                 }
+                
+                var sortQuery = new List<ISort>
+                {
+                    new FieldSort
+                    {
+                        Field = Infer.Field<AdvertisementSearchDocument>(f => f.Date),
+                        Order = SortOrder.Descending
+                    }
+                };
 
-                var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.ElasticSearchRequest, filters, categoriesFilter);
+                var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.ElasticSearchRequest, sortQuery, filters, categoriesFilter);
                 var advertisements = elasticResult.Items;
 
                 return _mapper.Map<List<AdvertisementSearchDocument>, List<AdvertisementDto>>(advertisements);

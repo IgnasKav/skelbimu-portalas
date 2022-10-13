@@ -54,15 +54,16 @@ public class WatchLaterList
             var watchLaterList = await _context.WatchLater
                 .Where(w => w.UserId == currentUserId)
                 .ToListAsync(cancellationToken);
-        
+            
             if (watchLaterList.Count > 0)
             {
-                var advertisementIds = watchLaterList.Select(w => (Id)w.AdvertisementId).ToList();
-                var watchLaterFilter = new IdsQuery
+                var advertisementIds = watchLaterList.Select(w =>  (Id)w.AdvertisementId).ToList();
+                var watchLaterFilter = new TermsQuery()
                 {
-                    Values = advertisementIds
+                    Field = Infer.Field<AdvertisementSearchDocument>(f => f.Id),
+                    Terms =  advertisementIds
                 };
-        
+                                        
                 filters.Add(watchLaterFilter);
             }
         
@@ -82,8 +83,17 @@ public class WatchLaterList
                     categoriesFilter.Add(elasticFilter);
                 }
             }
+
+            var sortQuery = new List<ISort>
+            {
+                new FieldSort
+                {
+                    Field = Infer.Field<AdvertisementSearchDocument>(f => f.Date),
+                    Order = SortOrder.Descending
+                }
+            };
         
-            var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.ElasticSearchRequest, filters, categoriesFilter);
+            var elasticResult = await _es.Search<AdvertisementSearchDocument>(request.ElasticSearchRequest, sortQuery, filters, categoriesFilter);
             var advertisements = elasticResult.Items;
             return _mapper.Map<List<AdvertisementSearchDocument>, List<AdvertisementDto>>(advertisements);
         }

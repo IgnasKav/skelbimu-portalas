@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using API.Extensions;
 using Application.Core;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Persistence;
 
 namespace API
@@ -58,6 +61,12 @@ namespace API
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "images")),
+                RequestPath = "/images"
+            });
 
             app.UseAuthentication();
 
