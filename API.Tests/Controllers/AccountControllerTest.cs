@@ -1,4 +1,7 @@
-﻿using API.Controllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using API.Controllers;
 using API.DTOs;
 using API.Services;
 using Domain;
@@ -9,9 +12,6 @@ using Microsoft.Extensions.Configuration;
 using MockQueryable.Moq;
 using Moq;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 

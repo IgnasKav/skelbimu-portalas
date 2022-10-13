@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ElasticSearch.SearchDocuments;
 
 namespace ElasticSearch
 {

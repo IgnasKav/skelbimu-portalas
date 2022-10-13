@@ -1,17 +1,14 @@
-﻿using Application.Categories;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Categories;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 using static Application.Categories.List;
 
@@ -46,7 +43,7 @@ namespace API.Tests.CategoryTests
             mapper.Setup(x => x.Map<Category, CategoryDto>(It.IsAny<Category>()))
                 .Returns(new CategoryDto());
 
-            var listHandler = new List.Handler(mockContext.Object, mapper.Object);
+            var listHandler = new Handler(mockContext.Object, mapper.Object);
 
             var result = listHandler.Handle(new Query(), CancellationToken.None);
 

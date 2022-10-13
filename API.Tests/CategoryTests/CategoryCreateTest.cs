@@ -1,15 +1,13 @@
-﻿using Application.Categories;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using System.Threading.Tasks;
+using Application.Categories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Persistence;
+using Xunit;
 
 namespace API.Tests.CategoryTests
 {
@@ -38,7 +36,7 @@ namespace API.Tests.CategoryTests
             var mockCreateHandler = new Create.Handler(mockContext.Object);
             var mockCommand = new Create.Command
             {
-                Category = new Domain.Category
+                Category = new Category
                 {
                     Name = name,
                     ParentId = parentId

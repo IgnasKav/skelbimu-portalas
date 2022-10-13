@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Application.Categories;
-using Domain;
 
 namespace Application.Advertisements
 {

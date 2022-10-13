@@ -1,6 +1,4 @@
 using System;
-using System.Reflection;
-using Application.Advertisements;
 using Application.Core;
 using ElasticSearch;
 using MediatR;

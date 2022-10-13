@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Application.Advertisements;
 using Application.Advertisements.Images;
 using Application.Advertisements.WatchLater;
-using Domain;
 using ElasticSearch;
 using Microsoft.AspNetCore.Mvc;
 
