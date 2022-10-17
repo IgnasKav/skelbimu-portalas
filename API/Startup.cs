@@ -1,5 +1,6 @@
 using System.IO;
 using API.Extensions;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -55,6 +56,8 @@ namespace API
                 RequestPath = "/images"
             });
 
+            app.UseHangfireDashboard();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -62,6 +65,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }

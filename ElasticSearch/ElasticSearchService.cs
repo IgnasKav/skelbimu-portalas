@@ -26,17 +26,15 @@ namespace ElasticSearch
     public class ElasticSearchService: IElasticSearchService
     {
         private int elasticPageSize = 9;
-        private readonly ElasticSearchOptions _options;
         private readonly DataContext _context;
         public IElasticClient Client { get; }
 
         public ElasticSearchService(ElasticSearchOptions options, DataContext context)
         {
-            _options = options;
             _context = context;
 
-            var connectoinPool = new SingleNodeConnectionPool(new Uri(options.Url));
-            var settings = new ConnectionSettings(connectoinPool)
+            var connectionPool = new SingleNodeConnectionPool(new Uri(options.Url));
+            var settings = new ConnectionSettings(connectionPool)
                 .DefaultMappingFor<AdvertisementSearchDocument>(m => m
                 .IndexName(IndexDefinition.Advertisement.Name));
 
