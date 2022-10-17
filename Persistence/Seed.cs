@@ -164,7 +164,7 @@ namespace Persistence
                 new Advertisement
                 {
                     Title = "Iphone 12",
-                    Date = DateTime.Now.AddMonths(-2),
+                    Date = DateTime.Now.AddMonths(-2).ToUniversalTime(),
                     Description = "Selling used Apple Iphone 12.",
                     CategoryId = iphone12Category.Id,
                     OwnerId = new Guid(advertisementOwner.Id),
@@ -176,7 +176,7 @@ namespace Persistence
                 new Advertisement
                 {
                     Title = "Pixel",
-                    Date = DateTime.Now.AddMonths(-1),
+                    Date = DateTime.Now.AddMonths(-1).ToUniversalTime(),
                     Description = "Used Pixel phone.",
                     CategoryId = pixelCategory.Id,
                     OwnerId = new Guid(advertisementOwner.Id),
@@ -188,7 +188,7 @@ namespace Persistence
                 new Advertisement
                 {
                     Title = "Apple Macbook 2019",
-                    Date = DateTime.Now.AddMonths(1),
+                    Date = DateTime.Now.AddMonths(1).ToUniversalTime(),
                     Description = "Almost ideal 2019 macbook pro 16 inch",
                     CategoryId = macBookCategory.Id,
                     OwnerId = new Guid(advertisementOwner.Id),
@@ -200,7 +200,7 @@ namespace Persistence
                 new Advertisement
                 {
                     Title = "Iphone 11",
-                    Date = DateTime.Now.AddMonths(2),
+                    Date = DateTime.Now.AddMonths(2).ToUniversalTime(),
                     Description = "Selling used iphone 11, great condition",
                     CategoryId = iphone11Category.Id,
                     OwnerId = new Guid(advertisementOwner.Id),
@@ -212,7 +212,7 @@ namespace Persistence
                 new Advertisement
                 {
                     Title = "MacBook pro m1 max 2021",
-                    Date = DateTime.Now.AddMonths(3),
+                    Date = DateTime.Now.AddMonths(3).ToUniversalTime(),
                     Description = "Screen size: 16 inch, Ram: 32GB, SSD: 1TB",
                     CategoryId = macBookCategory.Id,
                     OwnerId = new Guid(advertisementOwner.Id),

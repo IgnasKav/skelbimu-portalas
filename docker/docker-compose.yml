@@ -1,9 +1,17 @@
 version: '3'
 
 services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
     container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
     environment:
       - discovery.zen.minimum_master_nodes=1
       - discovery.type=single-node
@@ -23,6 +31,8 @@ services:
       - ./elasticsearch/data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+    depends_on:
+      - postgres
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.14.0
@@ -33,5 +43,14 @@ services:
     depends_on:
       - elasticsearch
   skelbimai-api:
-    image: skelbimai:latest
-    
+    container_name: skelbimai-api
+    build: ../
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+      - ElasticSearchOptions__Url=http://elasticsearch:9200
+      - ConnectionsStrings__DefaultConnection=Server=localhost; Port=5432; User Id=admin; Password=admin; Database=skelbimaiDb
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+      - elasticsearch

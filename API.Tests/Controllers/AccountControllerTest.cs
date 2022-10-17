@@ -129,7 +129,7 @@ namespace API.Tests.Controllers
 
             mockUserManager
                 .Setup(mockUserManager => mockUserManager.Users)
-                .Returns(mockUsers.Object);
+                .Returns(mockUsers);
 
             mockUserManager
                 .Setup(mockUserManager => mockUserManager.CreateAsync(It.IsAny<User>(), "Password"))
@@ -156,7 +156,7 @@ namespace API.Tests.Controllers
 
             mockUserManager
                 .Setup(mockUserManager => mockUserManager.Users)
-                .Returns(mockUsers.Object);
+                .Returns(mockUsers);
 
             mockUserManager
                 .Setup(mockUserManager => mockUserManager.CreateAsync(It.IsAny<User>(), "Password"))
