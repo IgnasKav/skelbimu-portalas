@@ -48,7 +48,6 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5001
       - ElasticSearchOptions__Url=http://elasticsearch:9200
-      - ConnectionsStrings__DefaultConnection=Server=localhost; Port=5432; User Id=admin; Password=admin; Database=skelbimaiDb
     ports:
       - "5001:5001"
     depends_on:
