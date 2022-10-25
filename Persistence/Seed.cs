@@ -163,6 +163,7 @@ namespace Persistence
             {
                 new Advertisement
                 {
+                    Id = Guid.NewGuid(),
                     Title = "Iphone 12",
                     Date = DateTime.Now.AddMonths(-2).ToUniversalTime(),
                     Description = "Selling used Apple Iphone 12.",
@@ -171,10 +172,12 @@ namespace Persistence
                     State = AdvertisementState.Approved,
                     City = "Kaunas",
                     Views = 0,
-                    Price = 20
+                    Price = 20,
+                    
                 },
                 new Advertisement
                 {
+                    Id = Guid.NewGuid(),
                     Title = "Pixel",
                     Date = DateTime.Now.AddMonths(-1).ToUniversalTime(),
                     Description = "Used Pixel phone.",
@@ -187,6 +190,7 @@ namespace Persistence
                 },
                 new Advertisement
                 {
+                    Id = Guid.NewGuid(),
                     Title = "Apple Macbook 2019",
                     Date = DateTime.Now.AddMonths(1).ToUniversalTime(),
                     Description = "Almost ideal 2019 macbook pro 16 inch",
@@ -199,6 +203,7 @@ namespace Persistence
                 },
                 new Advertisement
                 {
+                    Id = Guid.NewGuid(),
                     Title = "Iphone 11",
                     Date = DateTime.Now.AddMonths(2).ToUniversalTime(),
                     Description = "Selling used iphone 11, great condition",
@@ -211,6 +216,7 @@ namespace Persistence
                 },
                 new Advertisement
                 {
+                    Id = Guid.NewGuid(),
                     Title = "MacBook pro m1 max 2021",
                     Date = DateTime.Now.AddMonths(3).ToUniversalTime(),
                     Description = "Screen size: 16 inch, Ram: 32GB, SSD: 1TB",
@@ -223,7 +229,23 @@ namespace Persistence
                 }
             };
 
+            var advertisementsImages = new List<AdvertisementImage>();
+
+            for (var i = 0; i < advertisements.Count; i++)
+            {
+                var advertisement = advertisements[i];
+                var image = new AdvertisementImage
+                {
+                    AdvertisementId = advertisement.Id,
+                    UserId = new Guid(advertisementOwner.Id),
+                    ImagePath = $"images/default/{i}.jpeg"
+                };
+                
+                advertisementsImages.Add(image);
+            }
+
             await context.Advertisements.AddRangeAsync(advertisements);
+            await context.AdvertisementImage.AddRangeAsync(advertisementsImages);
             await context.SaveChangesAsync();
         }
     }

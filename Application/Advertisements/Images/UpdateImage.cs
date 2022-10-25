@@ -55,17 +55,14 @@ public class UpdateImage
             var image = command.Request.Image;
             var imageName = $"{image.FileName.Split('.')[0]}.jpg";
             var rootPath = _env.ContentRootPath;
-            var relativePath = $"images/{currentUserId.ToString()}/{advertisementId.ToString()}/{imageName}";
-            var advertisementPath = Path.Combine(rootPath, relativePath);
+            var imageUrl = $"images/{advertisementId.ToString()}/{imageName}";
+            var advertisementPath = Path.Combine(rootPath, imageUrl);
 
-            CheckIfUserFolderExists(currentUserId);
-            CheckIfAdvertisementFolderExists(currentUserId, advertisementId);
+            CheckIfAdvertisementFolderExists(advertisementId);
 
             await using FileStream fs = File.Create(advertisementPath);
             await image.CopyToAsync(fs, cancellationToken);
             await fs.FlushAsync(cancellationToken);
-
-            var imageUrl = $"{_config["BackendUrl"]}/{relativePath}";
             
             var imageEntities = await _context.AdvertisementImage.Where(i =>
                 i.AdvertisementId == advertisementId).ToListAsync(cancellationToken);
@@ -96,22 +93,11 @@ public class UpdateImage
 
             return imageUrl;
         }
-
-        private void CheckIfUserFolderExists(Guid userId)
-        {
-            var rootPath = _env.ContentRootPath;
-            var userFolderPath = Path.Combine(rootPath, $"images/{userId.ToString()}");
-
-            if (!Directory.Exists(userFolderPath))
-            {
-                Directory.CreateDirectory(userFolderPath);
-            }
-        }
         
-        private void CheckIfAdvertisementFolderExists(Guid userId, Guid advertisementId)
+        private void CheckIfAdvertisementFolderExists(Guid advertisementId)
         {
             var rootPath = _env.ContentRootPath;
-            var advertisementFolderPath = Path.Combine(rootPath, $"images/{userId.ToString()}/{advertisementId.ToString()}");
+            var advertisementFolderPath = Path.Combine(rootPath, $"images/{advertisementId.ToString()}");
 
             if (!Directory.Exists(advertisementFolderPath))
             {
